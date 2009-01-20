@@ -7,7 +7,7 @@ module Merb::Generators
     end
     
     desc <<-DESC
-      Generators a REST views for a resource, so that complex views and forms can be easily built
+      Generators REST views for a resource, so that complex views and forms can be easily built
     DESC
     
     first_argument  :name, :required => true, :desc => "model name"

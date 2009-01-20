@@ -3,13 +3,14 @@ require 'rake/gempackagetask'
 
 require 'merb-core'
 require 'merb-core/tasks/merb'
+require 'spec/rake/spectask'
 
 GEM_NAME = "rear_views"
 GEM_VERSION = "0.0.1"
-AUTHOR = "Your Name"
-EMAIL = "Your Email"
-HOMEPAGE = "http://merbivore.com/"
-SUMMARY = "Merb plugin that provides ..."
+AUTHOR = "Rue The Ghetto"
+EMAIL = "ru_ghetto@rubyghetto.com"
+HOMEPAGE = "http://github.com/rughetto/rear_views"
+SUMMARY = "Generators REST views for a resource, so that complex views and forms can be easily built. Currently only AR introspection and ERB templates."
 
 spec = Gem::Specification.new do |s|
   s.rubyforge_project = 'merb'
@@ -23,10 +24,9 @@ spec = Gem::Specification.new do |s|
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
-  s.add_dependency('merb', '>= 1.0.8')
+  s.add_dependency('merb', '>= 1.0')
   s.require_path = 'lib'
   s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,spec}/**/*")
-  
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -48,4 +48,10 @@ task :gemspec do
   File.open("#{GEM_NAME}.gemspec", "w") do |file|
     file.puts spec.to_ruby
   end
+end
+
+Spec::Rake::SpecTask.new do |t|
+   t.warning = true
+   t.spec_opts = ["--format", "specdoc", "--colour"]
+   t.spec_files = Dir['spec/**/*_spec.rb'].sort   
 end

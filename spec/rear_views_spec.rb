@@ -1,7 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "rear_views" do
-  it "should do nothing" do
+  it "spec tests should be setup correctly" do
     true.should == true
   end
+  
+  describe "rendering" do
+  end  
 end
