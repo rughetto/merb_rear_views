@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+
+# This script was inspired by one written by Erik Kastner, 
+# and a blog describing it's needs and usage can be found at 
+# http://metaatem.net/2007/04/20/fun-with-active_record-and-sqlite3
+# 
+# It can be used for hands on quick and dirty testing to see how the library 
+# is working in the IRB console. It will open an IRB console with
+# with a Templater::Generator object instantiated: @generator. 
+# You can render a template in the console to see what is going on.
+# Set your file level local variables by 
+#   file_name = '
+# 
+# This file must be executable to work: [sudo] chmod 775 spec/console
+#
+
+require 'rubygems'
+require 'templater'
+require 'irb'
+require 'ruby-debug'
+
+# useful functions
+def template_path(filename)
+  '%file_name%/' +  filename
+end  
+
+def template(name)
+  generator = build_generator(name)
+  template = Templater::Actions::Template.new(
+    generator, 
+    name, 
+    template_path( generator.filename ), 
+    "#{generator.filename}")
+end  
+
+# render it to console as a text string
+def render_template( name )
+  template(name).invoke!
+end
+
+# render it to the specified file
+def invoke_template( name )
+  template(name).invoke!
+end
+
+# build a generator
+def build_generator( arg_name )
+  gen_class = Class.new(Templater::Generator)
+  gen_class.class_eval do
+    def source_root
+      File.join( File.dirname(__FILE__), '..', 'lib', 'generators', 'views' )
+    end
+  end
+  puts File.dirname(__FILE__)
+  @generator = gen_class.new( 'spec/tmp/' )
+  @generator.instance_eval do 
+    # methods from Merb::Generators::NamedGenerator
+    def initialize(*args)
+      super
+    end
+    
+    def name
+      "new"
+    end  
+    
+    def class_name
+      name.gsub('-', '_').camel_case
+    end
+    
+    alias :module_name :class_name
+
+    def test_class_name
+      class_name + "Test"
+    end
+
+    def file_name
+      name.snake_case
+    end
+    
+    alias :base_name :file_name
+    def filename
+      "#{file_name}.html.erb"
+    end  
+
+    def symbol_name
+      file_name.gsub('-', '_')
+    end 
+  end
+  @generator  
+end  
+ 
+# render a test template to make sure this is setup correctly
+  # test_gen_class = Class.new(Templater::Generator)
+  # test_gen_class.class_eval do
+  #   def source_root
+  #     File.join( File.dirname(__FILE__), 'test_templates' )
+  #   end
+  # end
+  # test_template = Templater::Actions::Template.new( test_gen_class.new(File.dirname(__FILE__) ), 
+  #   :test_render, 
+  #   'test.html.erb', 
+  #   'tmp/test.html.erb' )
+  # puts test_template.render
+  # test_template.invoke!
+
+# start the conole with these variables
+IRB.start if __FILE__ == $0

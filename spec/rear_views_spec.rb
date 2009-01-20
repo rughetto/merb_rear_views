@@ -4,7 +4,5 @@ describe "rear_views" do
   it "spec tests should be setup correctly" do
     true.should == true
   end
-  
-  describe "rendering" do
-  end  
+   
 end
