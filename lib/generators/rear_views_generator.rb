@@ -11,50 +11,49 @@ module Merb::Generators
     DESC
     
     first_argument  :name, :required => true, :desc => "model name"
-    second_argument :attachments, :required => true, :as => :array, :default => [], :desc => "space separated list of fields"
-
-    [:index, :show, :edit, :new, :_form, :_list_view, :_full_view ].each do |view|
+    
+    [:index, :show, :edit, :new, :delete, :_form, :_list_view, :_full_view, :_show ].each do |view|
       template "#{view}".to_sym, :template_engine => :erb, :orm => :none do |template|
         template.source = "app/views/%file_name%/#{view}.html.erb"
         template.destination = "app/views" / base_path / "#{file_name}/#{view}.html.erb"
       end
     end
-
-  #   template :paperclip do
-  #     source(File.dirname(__FILE__) / 'templates' / '%file_name%.rb')
-  #     destination("schema/migrations/#{migration_file_name}.rb")
-  #   end
-  #   
-  #   def version
-  #     format("%03d", current_migration_nr + 1)
-  #   end
-  #   
-  #   def migration_file_name
-  #     names = migration_attachments
-  #     "#{version}_add_attachments_#{names.join("_")}_to_#{class_name.underscore}"
-  #   end
-  #   
-  #   def migration_name
-  #     names = migration_attachments
-  #     "add_attachments_#{names.join("_")}_to_#{class_name.underscore}".classify
-  #   end
-  # 
-  #   protected
-  #   
-  #   def migration_attachments      
-  #     names = attachments.map(&:underscore)
-  #     attachments.length == 1 ? names : names[0..-2] + ["and", names[-1]]
-  #   end
-  #   
-  #   def destination_directory
-  #     File.join(destination_root, 'schema', 'migrations')
-  #   end
-  # 
-  #   def current_migration_nr
-  #     Dir["#{destination_directory}/*"].map{|f| File.basename(f).match(/^(\d+)/)[0].to_i  }.max.to_i
-  #   end
-  #   
-  # end
+    
+    # methods available to the views ---------------
+    def klass
+      @klass ||= Object.full_const_get( class_name )
+    end  
+    
+    def columns
+      if @columns.blank?
+        @columns ||= {}
+        klass.columns.each do |col|
+          @columns[col.name] = col.type unless ['id', 'created_at', 'updated_at'].include? col.name
+        end 
+      end 
+      @columns 
+    end
+    
+    def relationships
+      @relationships ||= klass.reflections.keys
+    end   
+    
+    def singular_name
+      symbol_name.singularize
+    end  
+    
+    def instance_var
+      "@#{singular_name}"
+    end  
+    
+    def resource_sym
+      ":#{singular_name}"
+    end  
+    
+    def resources_sym
+      ":#{symbol_name}"
+    end  
+  end
 
   add :rear_views, RearViewsGenerator
 end

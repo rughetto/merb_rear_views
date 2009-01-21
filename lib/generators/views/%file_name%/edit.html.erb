@@ -1,0 +1,6 @@
+<h1>Edit <%= class_name %></h1>
+
+<%%= form_tag <%= instance_var %>, resource(<%= resources_sym %>, <%= instance_var %>) do %>
+  <%%= partial :form %>
+  <%%= submit 'Save' %>
+<%% end =%>

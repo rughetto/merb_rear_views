@@ -1,0 +1,28 @@
+<% 
+  columns.each do |key, val| -%>
+    <%  key = key.to_s
+        val = val.to_sym
+        if key.match(/_id$/)
+    %>
+      <%%= select :<%= key %>, 
+                  :collection => <%= key.classify %>.all,
+                  :text_method => :id, # change this to something appropriate for the model
+                  :value_method => :id,
+                  :selected => <%= instance_var %>.<%= key %>.to_s,
+                  :label => <%= key.humanize %>   %>
+  <%                
+    elsif type == :text
+  -%>    
+      <%%= text_area :<%= key %>,  :label => <%= key.humanize %> %>
+  <%   
+    elsif type == :boolean
+  -%>   
+      <%%= check_box :<%= key %>, :label => <%= key.humanize %> %>
+  <%  
+    else
+  -%>   
+      <%%= text_field :<%= key %>, :label => <%= key.humanize %>  %> 
+  <%  
+    end 
+  end 
+-%>

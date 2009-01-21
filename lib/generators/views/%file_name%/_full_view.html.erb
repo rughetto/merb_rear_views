@@ -1,0 +1,7 @@
+<h1><%= class_name.humanize %> - #<%%= <%= instance_var %>.id %></h1>
+<% columns.each do |key, val| -%>
+<p>
+  <b><%= key %></b>: 
+  <%%= <%= instance_var %>.<%= key %> %>
+</p>
+<% end -%>  
