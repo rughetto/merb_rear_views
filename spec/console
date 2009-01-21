@@ -18,6 +18,7 @@ require 'rubygems'
 require 'templater'
 require 'irb'
 require 'ruby-debug'
+require 'activerecord'
 
 # useful functions
 def template_path(filename)
@@ -44,6 +45,7 @@ def invoke_template( name )
 end
 
 # build a generator
+# have to hard wire the name unfortunately ...
 def build_generator( arg_name )
   gen_class = Class.new(Templater::Generator)
   gen_class.class_eval do
