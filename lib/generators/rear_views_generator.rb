@@ -1,6 +1,5 @@
 require 'merb_activerecord'
 require 'activerecord'
-Merb::Orms::ActiveRecord::Connect.run unless  Merb.disabled? :initfile
 
 module Merb::Generators
   class RearViewsGenerator < NamespacedGenerator
@@ -18,7 +17,6 @@ module Merb::Generators
     # all the view templates
     [:index, :show, :edit, :new, :delete, :_form, :_list_view, :_full_view ].each do |view|
       template "#{view}".to_sym do |template|
-        Merb.logger.debug "$TESTING = #{$TESTING}"
         template.source = "%file_name%/#{view}.html.erb"
         template.destination = "app/views" / base_path / "#{file_name.pluralize}/#{view}.html.erb"
       end
@@ -26,7 +24,19 @@ module Merb::Generators
     
     # methods available to the views ---------------
     def klass
-      @klass ||= Object.full_const_get( class_name )
+      if @klass.blank?
+        begin 
+          Object.full_const_get( class_name ) # only works for testing
+        rescue 
+          # for regular merb-gen use the database has not yet connected, so ...
+          Merb::Config.session_stores = []
+          Merb::Orms::ActiveRecord::Connect.run unless Merb.disabled? :initfile
+          # also the model classes haven't been loaded ...
+          Merb::BootLoader::LoadClasses.run
+        end    
+        @klass ||= Object.full_const_get( class_name )
+      end
+      @klass  
     end  
     
     def columns
