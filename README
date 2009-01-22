@@ -1,4 +1,48 @@
 rear_views
 ==========
 
-A plugin for the Merb framework that provides Generators REST views for a resource, so that complex views and forms can be easily built. Currently only AR ORM with ERB templates.
+A plugin for the Merb framework that provides modular REST views for a resource. That way complex views and forms can be easily built from highly conventioned parts. Currently this only supports the ActiveRecord ORM with ERB templates. Chip in and add some others if you think this a laudable project.
+
+
+Motivation
+
+So, what's wrong with the existing views. Other than the fact that Merb's generators don't actually add any code related to a model's attributes (which can slow a person down), there is a bigger modularity issue. When you are working with complex views and forms, a little _more_ convention over configuration goes a long way. When you have little partials to build into the views of association models, things are much easier.
+
+This plugin breaks the standard views into some additional partials that make it really easy to build complex views using convention. It also, does this ass-backwards to the Merb/Rails way, allowing you to build your schema and relationships first. After the schema is established, you can scaffold your views. 
+
+
+Install It:
+
+  1. Add the gem to your dependency.rb file (and thor:gem:install in into your project) 
+       dependency "rughetto-merb_rear_views", :require_as => "rear_views"
+  2. Do the command line merb-gen thing, with your model name as the only argument
+       merb-gen rear_views User
+
+
+What It Does:
+
+Using it will build the following view files in the usual place:
+     _form.html.erb
+     _full_view.html.erb
+     _list_view.html.erb
+     delete.html.erb
+     edit.html.erb
+     index.html.erb
+     new.html.erb
+     show.html.erb
+
+The _form partial is included in both the new and edit templates. It only includes the fields and not the form tags. That means that if you are building a form for a related model you can grab this partial and use it whole hog in a fields_for block. How much easier is that!   
+
+The _full_view and _list_view partials offer the same modular flexibility. The only caveat is that there is no guess work about what fields might be relevant for the list view. So you have to fix this one up yourself.
+
+
+Warings
+
+This isn't quite production ready and may be irrelevant since Merb is going away. 
+Known issues:
+  * merb-gen doesn't load the app prior to running the generators. Currently there is a hack that connects the database and loads the classes, but dependencies in the models won't currently be loaded unless explicitly declared in the file. I am still experimenting with how best to do this. 
+  * Only supports AR with ERB.
+  
+Future Work
+
+I put this together to DRY up the repetitive work that I do building applications with more complex data relations/interfaces. Rails has better support for scaffolding out your views, but it doesn't have these micro-partial conventions for building your views faster. When Rails and Merb merge, I will make sure to bring this along too ... unless I am really busy or just generally distracted.  
