@@ -1,0 +1,4 @@
+<h1>Destroy This Record?</h1>
+<%%= form_tag <%= instance_var %>, resource(<%= resource_sym %>, <%= instance_var %>, :destroy) do %>
+  <%%= submit 'Delete Record' %>
+<%% end =%>

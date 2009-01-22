@@ -12,9 +12,10 @@ module Merb::Generators
     
     first_argument  :name, :required => true, :desc => "model name"
     
-    [:index, :show, :edit, :new, :delete, :_form, :_list_view, :_full_view, :_show ].each do |view|
-      template "#{view}".to_sym, :template_engine => :erb, :orm => :none do |template|
-        template.source = "app/views/%file_name%/#{view}.html.erb"
+    # all the view templates
+    [:index, :show, :edit, :new, :delete, :_form, :_list_view, :_full_view ].each do |view|
+      template "#{view}".to_sym do |template|
+        template.source = "%file_name%/#{view}.html.erb"
         template.destination = "app/views" / base_path / "#{file_name}/#{view}.html.erb"
       end
     end

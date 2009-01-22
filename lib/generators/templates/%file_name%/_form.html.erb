@@ -11,11 +11,11 @@
                   :selected => <%= instance_var %>.<%= key %>.to_s,
                   :label => <%= key.humanize %>   %>
   <%                
-    elsif type == :text
+    elsif val == :text
   -%>    
       <%%= text_area :<%= key %>,  :label => <%= key.humanize %> %>
   <%   
-    elsif type == :boolean
+    elsif val == :boolean
   -%>   
       <%%= check_box :<%= key %>, :label => <%= key.humanize %> %>
   <%  

@@ -8,102 +8,29 @@
 # is working in the IRB console. It will open an IRB console with
 # with a Templater::Generator object instantiated: @generator. 
 # You can render a template in the console to see what is going on.
-# Set your file level local variables by 
-#   file_name = '
-# 
+#   @user_gen.invoke! 
+#
 # This file must be executable to work: [sudo] chmod 775 spec/console
 #
 
 require 'rubygems'
-require 'templater'
-require 'irb'
-require 'ruby-debug'
+require 'merb-core'
+require 'merb-gen'
+require 'templater/spec/helpers'
 require 'activerecord'
+require 'irb'
 
-# useful functions
-def template_path(filename)
-  '%file_name%/' +  filename
-end  
+Merb.disable(:initfile)
 
-def template(name)
-  generator = build_generator(name)
-  template = Templater::Actions::Template.new(
-    generator, 
-    name, 
-    template_path( generator.filename ), 
-    "#{generator.filename}")
-end  
+require File.dirname(__FILE__) + '/../lib/generators/rear_views_generator'
+require File.dirname(__FILE__) + "/database_setup"
+include DatabaseSetup
 
-# render it to console as a text string
-def render_template( name )
-  template(name).invoke!
-end
 
-# render it to the specified file
-def invoke_template( name )
-  template(name).invoke!
-end
+@user_gen = Merb::Generators::RearViewsGenerator.new( 'spec/tmp', {}, 'User' )
+@project_gen = Merb::Generators::RearViewsGenerator.new( 'spec/tmp', {}, 'Project' )
+@task_gen = Merb::Generators::RearViewsGenerator.new( 'spec/tmp', {}, 'Task' )
 
-# build a generator
-# have to hard wire the name unfortunately ...
-def build_generator( arg_name )
-  gen_class = Class.new(Templater::Generator)
-  gen_class.class_eval do
-    def source_root
-      File.join( File.dirname(__FILE__), '..', 'lib', 'generators', 'views' )
-    end
-  end
-  puts File.dirname(__FILE__)
-  @generator = gen_class.new( 'spec/tmp/' )
-  @generator.instance_eval do 
-    # methods from Merb::Generators::NamedGenerator
-    def initialize(*args)
-      super
-    end
-    
-    def name
-      "new"
-    end  
-    
-    def class_name
-      name.gsub('-', '_').camel_case
-    end
-    
-    alias :module_name :class_name
-
-    def test_class_name
-      class_name + "Test"
-    end
-
-    def file_name
-      name.snake_case
-    end
-    
-    alias :base_name :file_name
-    def filename
-      "#{file_name}.html.erb"
-    end  
-
-    def symbol_name
-      file_name.gsub('-', '_')
-    end 
-  end
-  @generator  
-end  
- 
-# render a test template to make sure this is setup correctly
-  # test_gen_class = Class.new(Templater::Generator)
-  # test_gen_class.class_eval do
-  #   def source_root
-  #     File.join( File.dirname(__FILE__), 'test_templates' )
-  #   end
-  # end
-  # test_template = Templater::Actions::Template.new( test_gen_class.new(File.dirname(__FILE__) ), 
-  #   :test_render, 
-  #   'test.html.erb', 
-  #   'tmp/test.html.erb' )
-  # puts test_template.render
-  # test_template.invoke!
 
 # start the conole with these variables
 IRB.start if __FILE__ == $0
