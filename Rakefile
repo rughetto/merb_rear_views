@@ -6,7 +6,7 @@ require 'merb-core/tasks/merb'
 require 'spec/rake/spectask'
 
 GEM_NAME = "rear_views"
-GEM_VERSION = "0.0.1"
+GEM_VERSION = "0.0.2"
 AUTHOR = "Rue The Ghetto"
 EMAIL = "ru_ghetto@rubyghetto.com"
 HOMEPAGE = "http://github.com/rughetto/rear_views"
@@ -24,9 +24,9 @@ spec = Gem::Specification.new do |s|
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
-  s.add_dependency('merb', '>= 1.0')
+  s.add_dependency('merb-core')
   s.require_path = 'lib'
-  s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,spec}/**/*")
+  s.files = %w(LICENSE README Rakefile TODO Generators) + Dir.glob("{lib,spec}/**/*")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

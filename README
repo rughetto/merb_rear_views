@@ -1,4 +1,4 @@
 rear_views
 ==========
 
-A plugin for the Merb framework that provides ...
+A plugin for the Merb framework that provides Generators REST views for a resource, so that complex views and forms can be easily built. Currently only AR ORM with ERB templates.

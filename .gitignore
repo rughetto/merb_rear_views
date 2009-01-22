@@ -3,3 +3,4 @@ log/*
 *.db
 spec/tmp
 pkg/*
+*.gemspec

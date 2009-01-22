@@ -1,5 +1,8 @@
-module Merb::Generators
+require 'merb_activerecord'
+require 'activerecord'
+Merb::Orms::ActiveRecord::Connect.run unless  Merb.disabled? :initfile
 
+module Merb::Generators
   class RearViewsGenerator < NamespacedGenerator
     
     def self.source_root
@@ -7,7 +10,7 @@ module Merb::Generators
     end
     
     desc <<-DESC
-      Generators REST views for a resource, so that complex views and forms can be easily built
+      Generators modular REST views for a resource, so that complex views and forms can be easily built
     DESC
     
     first_argument  :name, :required => true, :desc => "model name"
@@ -15,8 +18,9 @@ module Merb::Generators
     # all the view templates
     [:index, :show, :edit, :new, :delete, :_form, :_list_view, :_full_view ].each do |view|
       template "#{view}".to_sym do |template|
+        Merb.logger.debug "$TESTING = #{$TESTING}"
         template.source = "%file_name%/#{view}.html.erb"
-        template.destination = "app/views" / base_path / "#{file_name}/#{view}.html.erb"
+        template.destination = "app/views" / base_path / "#{file_name.pluralize}/#{view}.html.erb"
       end
     end
     
@@ -41,6 +45,10 @@ module Merb::Generators
     
     def singular_name
       symbol_name.singularize
+    end  
+    
+    def plural_name
+      singular_name.pluralize
     end  
     
     def instance_var

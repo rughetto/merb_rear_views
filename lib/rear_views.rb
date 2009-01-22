@@ -7,5 +7,6 @@ if defined?(Merb::Plugins)
   Merb::BootLoader.after_app_loads do
   end
   
-  Merb.add_generators(File.join(File.dirname(__FILE__), 'generators', 'rear_views_generator'))
+  generators = File.join(File.dirname(__FILE__), 'generators')
+  Merb.add_generators( generators / 'rear_views_generator')
 end

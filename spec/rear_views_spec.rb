@@ -42,20 +42,16 @@ describe "rear_views" do
       @generator = Merb::Generators::RearViewsGenerator.new( 'spec/tmp', {}, 'User' )
     end 
     
-    before(:each) do
-      system "rm -r tmp"
-    end  
-    
     it "should create views when invoke! is called" do
       @generator.invoke!
-      File.exists?("tmp/app/views/user/_form.html.erb")
-      File.exists?("tmp/app/views/user/_full_view.html.erb")
-      File.exists?("tmp/app/views/user/_list_view.html.erb")
-      File.exists?("tmp/app/views/user/delete.html.erb")
-      File.exists?("tmp/app/views/user/edit.html.erb")
-      File.exists?("tmp/app/views/user/index.html.erb")
-      File.exists?("tmp/app/views/user/new.html.erb")
-      File.exists?("tmp/app/views/user/show.html.erb")
+      File.exists?("tmp/app/views/users/_form.html.erb")
+      File.exists?("tmp/app/views/users/_full_view.html.erb")
+      File.exists?("tmp/app/views/users/_list_view.html.erb")
+      File.exists?("tmp/app/views/users/delete.html.erb")
+      File.exists?("tmp/app/views/users/edit.html.erb")
+      File.exists?("tmp/app/views/users/index.html.erb")
+      File.exists?("tmp/app/views/users/new.html.erb")
+      File.exists?("tmp/app/views/users/show.html.erb")
     end
      
   end  

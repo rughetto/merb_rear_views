@@ -1,7 +1,7 @@
 <h1><%= class_name.pluralize.humanize %></h1>
 
 <ul>
-  <%%= for @<%= instance_var %> in @<%= symbol_name %> -%>
+  <%%= for <%= instance_var %> in @<%= plural_name %> -%>
     <li><%%= partial :list_view %></li>
   <%% end -%>  
 </ul>
